@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaiOne Care - 居家護理摘要</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #212850 0%, #3D3D3D 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #FFFFFF;
+        }
+
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 10px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            padding: 8px 0;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        .header .subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
+        }
+
+        .processing-info {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .text-display-area {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 16px 32px;
+            margin-bottom: 10px;
+            color: #212850;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.10);
+            backdrop-filter: blur(6px);
+            overflow-y: auto;
+            min-height: 300px;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .text-content {
+            font-size: 16px;
+            line-height: 1.7;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .text-content h2 {
+            color: #212850;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #7F82B1;
+            padding-bottom: 8px;
+        }
+
+        .text-content p {
+            text-align: justify;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            padding: 0 10px;
+        }
+
+        .btn {
+            flex: 1;
+            max-width: 200px;
+            padding: 18px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7F82B1 0%, #9D1741 100%);
+            color: #FFFFFF;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #6B6E9D 0%, #8A1436 100%);
+            transform: translateY(-2px);
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(217, 217, 217, 0.8);
+            color: #212850;
+            border: 2px solid rgba(127, 130, 177, 0.5);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(217, 217, 217, 1);
+            border-color: #7F82B1;
+            transform: translateY(-2px);
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .copy-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 90%;
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .header .subtitle {
+                font-size: 18px;
+            }
+            
+            .text-display-area {
+                padding: 20px;
+                margin-bottom: 25px;
+                min-height: 350px;
+            }
+            
+            .text-content {
+                font-size: 16px;
+            }
+            
+            .text-content h2 {
+                font-size: 22px;
+            }
+            
+            .btn {
+                padding: 16px 24px;
+                font-size: 18px;
+                min-height: 56px;
+                max-width: none;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .header .subtitle {
+                font-size: 16px;
+            }
+            
+            .text-display-area {
+                padding: 15px;
+                margin-bottom: 20px;
+                min-height: 300px;
+            }
+            
+            .text-content {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+            
+            .text-content h2 {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .btn {
+                padding: 14px 20px;
+                font-size: 16px;
+                min-height: 48px;
+            }
+        }
+
+        /* 大螢幕優化 */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 90%;
+                padding: 40px;
+            }
+            
+            .header h1 {
+                font-size: 36px;
+            }
+            
+            .header .subtitle {
+                font-size: 22px;
+            }
+            
+            .text-display-area {
+                min-height: 500px;
+                border-radius: 20px;
+            }
+            
+            .text-content {
+                font-size: 16px;
+            }
+            
+            .text-content h2 {
+                font-size: 28px;
+                margin-bottom: 25px;
+            }
+            
+            .btn {
+                padding: 20px 40px;
+                font-size: 22px;
+                min-height: 70px;
+                max-width: 250px;
+            }
+        }
+
+        /* 滾動條樣式 */
+        .text-display-area::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .text-display-area::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .text-display-area::-webkit-scrollbar-thumb {
+            background: rgba(127, 130, 177, 0.5);
+            border-radius: 3px;
+        }
+
+        .text-display-area::-webkit-scrollbar-thumb:hover {
+            background: rgba(127, 130, 177, 0.8);
+        }
+
+        .section-title,
+        .text-content h1,
+        .text-content h2,
+        .text-content h3 {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #212850;
+        }
+    </style>
+</head>
+<body>
+    <div class="copy-status" id="copyStatus">內容已複製到剪貼簿</div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>TaiOne Care - 居家護理摘要</h1>
+            <div class="subtitle">智慧醫療照護系統</div>
+        </div>
+        
+        <div class="processing-info">
+            處理完成 • 耗時: 45317 ms
+        </div>
+        
+        <div class="text-display-area">
+            <div class="text-content" id="summaryContent">
+                病人評估  
+- 身體評估：洪曉花，86歲女性，1個月前中風導致右側癱瘓，目前留置鼻胃管及尿管。意識評估GCS 14分（輕度昏迷），溝通、視聽力正常。口腔清潔少於2次/日，無假牙。皮膚完整，無水腫，使用氣墊床。肌力左上肢3分、右上肢3分、左下肢2分、右下肢1分，無法行走，需輪椅協助。ADL總分10分（極重度失能），IADL總分0分（重度依賴）。  
+- 心理社會評估：無憂鬱、焦慮或自殺傾向，身心適應良好。家庭經濟小康，主要照顧者為配偶，醫療決策由子女負責。教育程度不識字，宗教信仰道教或民間信仰。  
+- 社會及靈性評估：無重大事件發生，家庭支持良好。  
+- 異常值：早上血壓偏高，最高曾達200 mmHg；體重一年內非刻意減少3公斤以上；極重度失能，完全依賴他人照顧；壓力性損傷危險評估16分（輕度危險）；BMI≧23，營養評估總分13分。  
+
+疾病診斷  
+- 急性疾病：腦中風（右側癱瘓，留置鼻胃管及尿管）。  
+- 慢性疾病：高血壓性心臟病（無心衰竭）、慢性缺血性心臟病、肌肉骨骼問題（中等）、神經系統問題（中等）、內分泌及代謝問題（中等）。  
+- 護理診斷：高血壓控制不佳、極重度失能、壓力性損傷風險、管路感染風險、營養支持需求。  
+
+醫療整體評估與計畫  
+- 血壓管理：建議家屬每日定時測量並記錄血壓，若持續高於180 mmHg或出現頭暈、胸悶等症狀，需立即就醫。醫師可考慮調整降壓藥物劑量或種類。  
+- 管路照護：定期更換尿管，觀察出口及腹部皮膚，若有紅腫、疼痛、分泌物異常即回報。鼻胃管需每日清潔，預防感染。  
+- 藥物管理：目前使用SENnapur軟便劑、Takepron抗潰瘍藥、ACTein化痰藥，無多重用藥問題。衛教家屬正確給藥方式，注意藥物交互作用及副作用。  
+- 營養支持：鼻胃管餵食，建議依營養師指示調整配方，定期評估體重及營養狀態。  
+- 壓力性損傷預防：持續監測皮膚狀況，定時翻身，使用氣墊床，避免長時間壓迫。  
+- 衛教：加強家屬生命徵象監測、傷口及管路觀察、皮膚保護及感染預防知識。  
+
+護理計畫  
+護理問題一：高血壓控制不佳  
+- 護理目標：  
+  - 一週內血壓維持於140/90 mmHg以下，無高血壓併發症。  
+  - 一個月內家屬能正確記錄並回報血壓趨勢。  
+- 護理措施：  
+  - 教導家屬正確測量血壓及記錄方法。  
+  - 監測高血壓症狀（頭暈、胸悶、視力模糊）。  
+  - 協助醫師評估降壓藥物調整。  
+- 護理執行計畫：  
+  - 由護理師於每次訪視時檢查血壓記錄本。  
+  - 家屬每日早晚測量血壓並記錄。  
+  - 若血壓超過180 mmHg，家屬即時聯絡醫師。  
+  - 每週回報血壓趨勢給護理師。  
+  - 依醫師指示調整藥物，護理師協助追蹤副作用。  
+
+護理問題二：壓力性損傷風險  
+- 護理目標：  
+  - 兩週內皮膚保持完整，無新生壓瘡。  
+  - 一個月內家屬能獨立執行翻身及皮膚檢查。  
+- 護理措施：  
+  - 教導家屬定時翻身（每2小時一次）。  
+  - 監測皮膚顏色、完整性及壓力點。  
+  - 使用氣墊床，減少壓力集中。  
+- 護理執行計畫：  
+  - 護理師每次訪視時檢查皮膚狀況。  
+  - 家屬每日早晚檢查皮膚並記錄異常。  
+  - 每2小時協助翻身，並記錄時間。  
+  - 若發現紅腫、破皮即時回報。  
+  - 定期更換床單及尿布，保持皮膚乾燥。  
+
+護理問題三：管路感染風險  
+- 護理目標：  
+  - 一週內無發燒、局部紅腫或分泌物異常。  
+  - 一個月內家屬能正確執行管路清潔。  
+- 護理措施：  
+  - 教導家屬尿管及鼻胃管清潔流程。  
+  - 監測感染徵象（發燒、分泌物、紅腫）。  
+  - 定期更換管路，遵循無菌操作。  
+- 護理執行計畫：  
+  - 護理師每次訪視時檢查管路及皮膚。  
+  - 家屬每日清潔管路出口，並記錄狀況。  
+  - 每週協助更換尿管，並評估感染徵象。  
+  - 若有異常即時回報醫療團隊。  
+  - 定期衛教家屬無菌操作及感染預防。  
+
+整體護理評估與調整  
+- 定期（每週）評估血壓、皮膚及管路狀況，根據病人反應及異常值調整護理計畫。  
+- 若血壓持續偏高或皮膚出現壓瘡，立即通知醫師並調整護理措施。  
+- 持續追蹤營養狀態及體重變化，必要時諮詢營養師。  
+- 依病人及家屬學習成效，調整衛教內容及頻率。  
+
+病人跟家庭的參與  
+- 家屬主動參與血壓監測、皮膚檢查及管路清潔，能即時回報異常。  
+- 家屬已熟悉照護流程，願意配合護理師衛教及執行護理措施。  
+- 鼓勵家屬參與護理計畫討論，定期回饋照護困難及需求，提升照護品質。  
+- 病人雖極重度失能，家庭支持良好，照護意願高，有助於居家安全與健康維護。
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <button class="btn btn-primary" onclick="copyToClipboard()">複製全部內容</button>
+            <button class="btn btn-secondary" onclick="handleClose()">關閉</button>
+        </div>
+    </div>
+
+    <script>
+        // 儲存摘要內容
+        const summaryContentData = "\u75C5\u4EBA\u8A55\u4F30  \n- \u8EAB\u9AD4\u8A55\u4F30\uFF1A\u6D2A\u66C9\u82B1\uFF0C86\u6B72\u5973\u6027\uFF0C1\u500B\u6708\u524D\u4E2D\u98A8\u5C0E\u81F4\u53F3\u5074\u7671\u7613\uFF0C\u76EE\u524D\u7559\u7F6E\u9F3B\u80C3\u7BA1\u53CA\u5C3F\u7BA1\u3002\u610F\u8B58\u8A55\u4F30GCS 14\u5206\uFF08\u8F15\u5EA6\u660F\u8FF7\uFF09\uFF0C\u6E9D\u901A\u3001\u8996\u807D\u529B\u6B63\u5E38\u3002\u53E3\u8154\u6E05\u6F54\u5C11\u65BC2\u6B21/\u65E5\uFF0C\u7121\u5047\u7259\u3002\u76AE\u819A\u5B8C\u6574\uFF0C\u7121\u6C34\u816B\uFF0C\u4F7F\u7528\u6C23\u588A\u5E8A\u3002\u808C\u529B\u5DE6\u4E0A\u80A23\u5206\u3001\u53F3\u4E0A\u80A23\u5206\u3001\u5DE6\u4E0B\u80A22\u5206\u3001\u53F3\u4E0B\u80A21\u5206\uFF0C\u7121\u6CD5\u884C\u8D70\uFF0C\u9700\u8F2A\u6905\u5354\u52A9\u3002ADL\u7E3D\u520610\u5206\uFF08\u6975\u91CD\u5EA6\u5931\u80FD\uFF09\uFF0CIADL\u7E3D\u52060\u5206\uFF08\u91CD\u5EA6\u4F9D\u8CF4\uFF09\u3002  \n- \u5FC3\u7406\u793E\u6703\u8A55\u4F30\uFF1A\u7121\u6182\u9B31\u3001\u7126\u616E\u6216\u81EA\u6BBA\u50BE\u5411\uFF0C\u8EAB\u5FC3\u9069\u61C9\u826F\u597D\u3002\u5BB6\u5EAD\u7D93\u6FDF\u5C0F\u5EB7\uFF0C\u4E3B\u8981\u7167\u9867\u8005\u70BA\u914D\u5076\uFF0C\u91AB\u7642\u6C7A\u7B56\u7531\u5B50\u5973\u8CA0\u8CAC\u3002\u6559\u80B2\u7A0B\u5EA6\u4E0D\u8B58\u5B57\uFF0C\u5B97\u6559\u4FE1\u4EF0\u9053\u6559\u6216\u6C11\u9593\u4FE1\u4EF0\u3002  \n- \u793E\u6703\u53CA\u9748\u6027\u8A55\u4F30\uFF1A\u7121\u91CD\u5927\u4E8B\u4EF6\u767C\u751F\uFF0C\u5BB6\u5EAD\u652F\u6301\u826F\u597D\u3002  \n- \u7570\u5E38\u503C\uFF1A\u65E9\u4E0A\u8840\u58D3\u504F\u9AD8\uFF0C\u6700\u9AD8\u66FE\u9054200 mmHg\uFF1B\u9AD4\u91CD\u4E00\u5E74\u5167\u975E\u523B\u610F\u6E1B\u5C113\u516C\u65A4\u4EE5\u4E0A\uFF1B\u6975\u91CD\u5EA6\u5931\u80FD\uFF0C\u5B8C\u5168\u4F9D\u8CF4\u4ED6\u4EBA\u7167\u9867\uFF1B\u58D3\u529B\u6027\u640D\u50B7\u5371\u96AA\u8A55\u4F3016\u5206\uFF08\u8F15\u5EA6\u5371\u96AA\uFF09\uFF1BBMI\u226723\uFF0C\u71DF\u990A\u8A55\u4F30\u7E3D\u520613\u5206\u3002  \n\n\u75BE\u75C5\u8A3A\u65B7  \n- \u6025\u6027\u75BE\u75C5\uFF1A\u8166\u4E2D\u98A8\uFF08\u53F3\u5074\u7671\u7613\uFF0C\u7559\u7F6E\u9F3B\u80C3\u7BA1\u53CA\u5C3F\u7BA1\uFF09\u3002  \n- \u6162\u6027\u75BE\u75C5\uFF1A\u9AD8\u8840\u58D3\u6027\u5FC3\u81DF\u75C5\uFF08\u7121\u5FC3\u8870\u7AED\uFF09\u3001\u6162\u6027\u7F3A\u8840\u6027\u5FC3\u81DF\u75C5\u3001\u808C\u8089\u9AA8\u9ABC\u554F\u984C\uFF08\u4E2D\u7B49\uFF09\u3001\u795E\u7D93\u7CFB\u7D71\u554F\u984C\uFF08\u4E2D\u7B49\uFF09\u3001\u5167\u5206\u6CCC\u53CA\u4EE3\u8B1D\u554F\u984C\uFF08\u4E2D\u7B49\uFF09\u3002  \n- \u8B77\u7406\u8A3A\u65B7\uFF1A\u9AD8\u8840\u58D3\u63A7\u5236\u4E0D\u4F73\u3001\u6975\u91CD\u5EA6\u5931\u80FD\u3001\u58D3\u529B\u6027\u640D\u50B7\u98A8\u96AA\u3001\u7BA1\u8DEF\u611F\u67D3\u98A8\u96AA\u3001\u71DF\u990A\u652F\u6301\u9700\u6C42\u3002  \n\n\u91AB\u7642\u6574\u9AD4\u8A55\u4F30\u8207\u8A08\u756B  \n- \u8840\u58D3\u7BA1\u7406\uFF1A\u5EFA\u8B70\u5BB6\u5C6C\u6BCF\u65E5\u5B9A\u6642\u6E2C\u91CF\u4E26\u8A18\u9304\u8840\u58D3\uFF0C\u82E5\u6301\u7E8C\u9AD8\u65BC180 mmHg\u6216\u51FA\u73FE\u982D\u6688\u3001\u80F8\u60B6\u7B49\u75C7\u72C0\uFF0C\u9700\u7ACB\u5373\u5C31\u91AB\u3002\u91AB\u5E2B\u53EF\u8003\u616E\u8ABF\u6574\u964D\u58D3\u85E5\u7269\u5291\u91CF\u6216\u7A2E\u985E\u3002  \n- \u7BA1\u8DEF\u7167\u8B77\uFF1A\u5B9A\u671F\u66F4\u63DB\u5C3F\u7BA1\uFF0C\u89C0\u5BDF\u51FA\u53E3\u53CA\u8179\u90E8\u76AE\u819A\uFF0C\u82E5\u6709\u7D05\u816B\u3001\u75BC\u75DB\u3001\u5206\u6CCC\u7269\u7570\u5E38\u5373\u56DE\u5831\u3002\u9F3B\u80C3\u7BA1\u9700\u6BCF\u65E5\u6E05\u6F54\uFF0C\u9810\u9632\u611F\u67D3\u3002  \n- \u85E5\u7269\u7BA1\u7406\uFF1A\u76EE\u524D\u4F7F\u7528SENnapur\u8EDF\u4FBF\u5291\u3001Takepron\u6297\u6F70\u760D\u85E5\u3001ACTein\u5316\u75F0\u85E5\uFF0C\u7121\u591A\u91CD\u7528\u85E5\u554F\u984C\u3002\u885B\u6559\u5BB6\u5C6C\u6B63\u78BA\u7D66\u85E5\u65B9\u5F0F\uFF0C\u6CE8\u610F\u85E5\u7269\u4EA4\u4E92\u4F5C\u7528\u53CA\u526F\u4F5C\u7528\u3002  \n- \u71DF\u990A\u652F\u6301\uFF1A\u9F3B\u80C3\u7BA1\u9935\u98DF\uFF0C\u5EFA\u8B70\u4F9D\u71DF\u990A\u5E2B\u6307\u793A\u8ABF\u6574\u914D\u65B9\uFF0C\u5B9A\u671F\u8A55\u4F30\u9AD4\u91CD\u53CA\u71DF\u990A\u72C0\u614B\u3002  \n- \u58D3\u529B\u6027\u640D\u50B7\u9810\u9632\uFF1A\u6301\u7E8C\u76E3\u6E2C\u76AE\u819A\u72C0\u6CC1\uFF0C\u5B9A\u6642\u7FFB\u8EAB\uFF0C\u4F7F\u7528\u6C23\u588A\u5E8A\uFF0C\u907F\u514D\u9577\u6642\u9593\u58D3\u8FEB\u3002  \n- \u885B\u6559\uFF1A\u52A0\u5F37\u5BB6\u5C6C\u751F\u547D\u5FB5\u8C61\u76E3\u6E2C\u3001\u50B7\u53E3\u53CA\u7BA1\u8DEF\u89C0\u5BDF\u3001\u76AE\u819A\u4FDD\u8B77\u53CA\u611F\u67D3\u9810\u9632\u77E5\u8B58\u3002  \n\n\u8B77\u7406\u8A08\u756B  \n\u8B77\u7406\u554F\u984C\u4E00\uFF1A\u9AD8\u8840\u58D3\u63A7\u5236\u4E0D\u4F73  \n- \u8B77\u7406\u76EE\u6A19\uFF1A  \n  - \u4E00\u9031\u5167\u8840\u58D3\u7DAD\u6301\u65BC140/90 mmHg\u4EE5\u4E0B\uFF0C\u7121\u9AD8\u8840\u58D3\u4F75\u767C\u75C7\u3002  \n  - \u4E00\u500B\u6708\u5167\u5BB6\u5C6C\u80FD\u6B63\u78BA\u8A18\u9304\u4E26\u56DE\u5831\u8840\u58D3\u8DA8\u52E2\u3002  \n- \u8B77\u7406\u63AA\u65BD\uFF1A  \n  - \u6559\u5C0E\u5BB6\u5C6C\u6B63\u78BA\u6E2C\u91CF\u8840\u58D3\u53CA\u8A18\u9304\u65B9\u6CD5\u3002  \n  - \u76E3\u6E2C\u9AD8\u8840\u58D3\u75C7\u72C0\uFF08\u982D\u6688\u3001\u80F8\u60B6\u3001\u8996\u529B\u6A21\u7CCA\uFF09\u3002  \n  - \u5354\u52A9\u91AB\u5E2B\u8A55\u4F30\u964D\u58D3\u85E5\u7269\u8ABF\u6574\u3002  \n- \u8B77\u7406\u57F7\u884C\u8A08\u756B\uFF1A  \n  - \u7531\u8B77\u7406\u5E2B\u65BC\u6BCF\u6B21\u8A2A\u8996\u6642\u6AA2\u67E5\u8840\u58D3\u8A18\u9304\u672C\u3002  \n  - \u5BB6\u5C6C\u6BCF\u65E5\u65E9\u665A\u6E2C\u91CF\u8840\u58D3\u4E26\u8A18\u9304\u3002  \n  - \u82E5\u8840\u58D3\u8D85\u904E180 mmHg\uFF0C\u5BB6\u5C6C\u5373\u6642\u806F\u7D61\u91AB\u5E2B\u3002  \n  - \u6BCF\u9031\u56DE\u5831\u8840\u58D3\u8DA8\u52E2\u7D66\u8B77\u7406\u5E2B\u3002  \n  - \u4F9D\u91AB\u5E2B\u6307\u793A\u8ABF\u6574\u85E5\u7269\uFF0C\u8B77\u7406\u5E2B\u5354\u52A9\u8FFD\u8E64\u526F\u4F5C\u7528\u3002  \n\n\u8B77\u7406\u554F\u984C\u4E8C\uFF1A\u58D3\u529B\u6027\u640D\u50B7\u98A8\u96AA  \n- \u8B77\u7406\u76EE\u6A19\uFF1A  \n  - \u5169\u9031\u5167\u76AE\u819A\u4FDD\u6301\u5B8C\u6574\uFF0C\u7121\u65B0\u751F\u58D3\u7621\u3002  \n  - \u4E00\u500B\u6708\u5167\u5BB6\u5C6C\u80FD\u7368\u7ACB\u57F7\u884C\u7FFB\u8EAB\u53CA\u76AE\u819A\u6AA2\u67E5\u3002  \n- \u8B77\u7406\u63AA\u65BD\uFF1A  \n  - \u6559\u5C0E\u5BB6\u5C6C\u5B9A\u6642\u7FFB\u8EAB\uFF08\u6BCF2\u5C0F\u6642\u4E00\u6B21\uFF09\u3002  \n  - \u76E3\u6E2C\u76AE\u819A\u984F\u8272\u3001\u5B8C\u6574\u6027\u53CA\u58D3\u529B\u9EDE\u3002  \n  - \u4F7F\u7528\u6C23\u588A\u5E8A\uFF0C\u6E1B\u5C11\u58D3\u529B\u96C6\u4E2D\u3002  \n- \u8B77\u7406\u57F7\u884C\u8A08\u756B\uFF1A  \n  - \u8B77\u7406\u5E2B\u6BCF\u6B21\u8A2A\u8996\u6642\u6AA2\u67E5\u76AE\u819A\u72C0\u6CC1\u3002  \n  - \u5BB6\u5C6C\u6BCF\u65E5\u65E9\u665A\u6AA2\u67E5\u76AE\u819A\u4E26\u8A18\u9304\u7570\u5E38\u3002  \n  - \u6BCF2\u5C0F\u6642\u5354\u52A9\u7FFB\u8EAB\uFF0C\u4E26\u8A18\u9304\u6642\u9593\u3002  \n  - \u82E5\u767C\u73FE\u7D05\u816B\u3001\u7834\u76AE\u5373\u6642\u56DE\u5831\u3002  \n  - \u5B9A\u671F\u66F4\u63DB\u5E8A\u55AE\u53CA\u5C3F\u5E03\uFF0C\u4FDD\u6301\u76AE\u819A\u4E7E\u71E5\u3002  \n\n\u8B77\u7406\u554F\u984C\u4E09\uFF1A\u7BA1\u8DEF\u611F\u67D3\u98A8\u96AA  \n- \u8B77\u7406\u76EE\u6A19\uFF1A  \n  - \u4E00\u9031\u5167\u7121\u767C\u71D2\u3001\u5C40\u90E8\u7D05\u816B\u6216\u5206\u6CCC\u7269\u7570\u5E38\u3002  \n  - \u4E00\u500B\u6708\u5167\u5BB6\u5C6C\u80FD\u6B63\u78BA\u57F7\u884C\u7BA1\u8DEF\u6E05\u6F54\u3002  \n- \u8B77\u7406\u63AA\u65BD\uFF1A  \n  - \u6559\u5C0E\u5BB6\u5C6C\u5C3F\u7BA1\u53CA\u9F3B\u80C3\u7BA1\u6E05\u6F54\u6D41\u7A0B\u3002  \n  - \u76E3\u6E2C\u611F\u67D3\u5FB5\u8C61\uFF08\u767C\u71D2\u3001\u5206\u6CCC\u7269\u3001\u7D05\u816B\uFF09\u3002  \n  - \u5B9A\u671F\u66F4\u63DB\u7BA1\u8DEF\uFF0C\u9075\u5FAA\u7121\u83CC\u64CD\u4F5C\u3002  \n- \u8B77\u7406\u57F7\u884C\u8A08\u756B\uFF1A  \n  - \u8B77\u7406\u5E2B\u6BCF\u6B21\u8A2A\u8996\u6642\u6AA2\u67E5\u7BA1\u8DEF\u53CA\u76AE\u819A\u3002  \n  - \u5BB6\u5C6C\u6BCF\u65E5\u6E05\u6F54\u7BA1\u8DEF\u51FA\u53E3\uFF0C\u4E26\u8A18\u9304\u72C0\u6CC1\u3002  \n  - \u6BCF\u9031\u5354\u52A9\u66F4\u63DB\u5C3F\u7BA1\uFF0C\u4E26\u8A55\u4F30\u611F\u67D3\u5FB5\u8C61\u3002  \n  - \u82E5\u6709\u7570\u5E38\u5373\u6642\u56DE\u5831\u91AB\u7642\u5718\u968A\u3002  \n  - \u5B9A\u671F\u885B\u6559\u5BB6\u5C6C\u7121\u83CC\u64CD\u4F5C\u53CA\u611F\u67D3\u9810\u9632\u3002  \n\n\u6574\u9AD4\u8B77\u7406\u8A55\u4F30\u8207\u8ABF\u6574  \n- \u5B9A\u671F\uFF08\u6BCF\u9031\uFF09\u8A55\u4F30\u8840\u58D3\u3001\u76AE\u819A\u53CA\u7BA1\u8DEF\u72C0\u6CC1\uFF0C\u6839\u64DA\u75C5\u4EBA\u53CD\u61C9\u53CA\u7570\u5E38\u503C\u8ABF\u6574\u8B77\u7406\u8A08\u756B\u3002  \n- \u82E5\u8840\u58D3\u6301\u7E8C\u504F\u9AD8\u6216\u76AE\u819A\u51FA\u73FE\u58D3\u7621\uFF0C\u7ACB\u5373\u901A\u77E5\u91AB\u5E2B\u4E26\u8ABF\u6574\u8B77\u7406\u63AA\u65BD\u3002  \n- \u6301\u7E8C\u8FFD\u8E64\u71DF\u990A\u72C0\u614B\u53CA\u9AD4\u91CD\u8B8A\u5316\uFF0C\u5FC5\u8981\u6642\u8AEE\u8A62\u71DF\u990A\u5E2B\u3002  \n- \u4F9D\u75C5\u4EBA\u53CA\u5BB6\u5C6C\u5B78\u7FD2\u6210\u6548\uFF0C\u8ABF\u6574\u885B\u6559\u5167\u5BB9\u53CA\u983B\u7387\u3002  \n\n\u75C5\u4EBA\u8DDF\u5BB6\u5EAD\u7684\u53C3\u8207  \n- \u5BB6\u5C6C\u4E3B\u52D5\u53C3\u8207\u8840\u58D3\u76E3\u6E2C\u3001\u76AE\u819A\u6AA2\u67E5\u53CA\u7BA1\u8DEF\u6E05\u6F54\uFF0C\u80FD\u5373\u6642\u56DE\u5831\u7570\u5E38\u3002  \n- \u5BB6\u5C6C\u5DF2\u719F\u6089\u7167\u8B77\u6D41\u7A0B\uFF0C\u9858\u610F\u914D\u5408\u8B77\u7406\u5E2B\u885B\u6559\u53CA\u57F7\u884C\u8B77\u7406\u63AA\u65BD\u3002  \n- \u9F13\u52F5\u5BB6\u5C6C\u53C3\u8207\u8B77\u7406\u8A08\u756B\u8A0E\u8AD6\uFF0C\u5B9A\u671F\u56DE\u994B\u7167\u8B77\u56F0\u96E3\u53CA\u9700\u6C42\uFF0C\u63D0\u5347\u7167\u8B77\u54C1\u8CEA\u3002  \n- \u75C5\u4EBA\u96D6\u6975\u91CD\u5EA6\u5931\u80FD\uFF0C\u5BB6\u5EAD\u652F\u6301\u826F\u597D\uFF0C\u7167\u8B77\u610F\u9858\u9AD8\uFF0C\u6709\u52A9\u65BC\u5C45\u5BB6\u5B89\u5168\u8207\u5065\u5EB7\u7DAD\u8B77\u3002";
+
+        function copyToClipboard() {
+            try {
+                // 創建臨時 textarea 元素來複製文字
+                const textArea = document.createElement('textarea');
+                textArea.value = summaryContentData;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                // 執行複製
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                if (successful) {
+                    showCopyStatus();
+                } else {
+                    // 嘗試使用現代 Clipboard API
+                    if (navigator.clipboard && window.isSecureContext) {
+                        navigator.clipboard.writeText(summaryContentData).then(() => {
+                            showCopyStatus();
+                        }).catch(err => {
+                            console.error('複製失敗:', err);
+                            alert('複製失敗，請手動選取內容進行複製');
+                        });
+                    } else {
+                        alert('您的瀏覽器不支援自動複製功能，請手動選取內容進行複製');
+                    }
+                }
+            } catch (err) {
+                console.error('複製過程發生錯誤:', err);
+                alert('複製失敗，請手動選取內容進行複製');
+            }
+        }
+
+        function showCopyStatus() {
+            const status = document.getElementById('copyStatus');
+            status.style.display = 'block';
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 2000);
+        }
+
+        function handleClose() {
+            const confirmClose = confirm('確定要關閉這個頁面嗎？');
+            if (confirmClose) {
+                // 嘗試關閉視窗
+                window.close();
+                
+                // 如果無法關閉（例如不是由 JavaScript 開啟的視窗），提供其他選項
+                setTimeout(() => {
+                    alert('請手動關閉此分頁');
+                }, 100);
+            }
+        }
+
+        // 鍵盤快捷鍵支援
+        document.addEventListener('keydown', function(event) {
+            // Ctrl+C 複製
+            if (event.ctrlKey && event.key === 'c' && event.target.tagName !== 'TEXTAREA' && event.target.tagName !== 'INPUT') {
+                event.preventDefault();
+                copyToClipboard();
+            }
+            // ESC 鍵關閉
+            else if (event.key === 'Escape') {
+                handleClose();
+            }
+        });
+
+        // 頁面載入完成後的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('TaiOne Care 居家護理摘要頁面已載入');
+        });
+    </script>
+</body>
+</html>
